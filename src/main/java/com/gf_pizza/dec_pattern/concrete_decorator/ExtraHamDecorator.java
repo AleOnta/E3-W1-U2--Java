@@ -4,24 +4,24 @@ import com.gf_pizza.dec_pattern.component.Consummation;
 import com.gf_pizza.dec_pattern.decorator.ExtraAdditionDecorator;
 
 public class ExtraHamDecorator extends ExtraAdditionDecorator {
-
-	public ExtraHamDecorator(Consummation consumation) {
-		this.consumation = consumation;
-	}
 	
+	public ExtraHamDecorator(Consummation consummation) {
+		super(consummation);
+	}
+
 	@Override
 	public String getName() {
-		return consumation.getName() + "+ Ham ";
+		return consummation.getName() + "+ Ham ";
 	}
 
 	@Override
 	public double getKcal() {
-		return consumation.getKcal() + 300;
+		return consummation.getKcal() + 300;
 	}
 	
 	@Override
 	public double getPrice() {
-		return consumation.getPrice() + 1.20;
+		return consummation.getPrice() + 1.20;
 	}
 
 	public String toString() {

@@ -68,7 +68,7 @@ public class RestaurantRunner implements CommandLineRunner {
 							System.out.println((i+1) + " - " + drinksArray[i]);
 						}
 									
-						System.out.println("\nSelect a drink by his own code");
+						System.out.println("\nSelect a drink by her own code");
 						int drinkChoice = askForInteger(1, 5);
 								
 						Consummation drink = null;
@@ -151,7 +151,7 @@ public class RestaurantRunner implements CommandLineRunner {
 							System.out.println((i+1) + " - " + pizzasArray[i]);
 						}
 								
-						System.out.println("\nSelect a pizza by his own code");
+						System.out.println("\nSelect a pizza by her own code");
 						int pizzaChoice = askForInteger(1, 6);
 								
 						Consummation pizza = null;
@@ -228,14 +228,14 @@ public class RestaurantRunner implements CommandLineRunner {
 				j--;	
 			}
 			
-			Order order = (Order) appContext.getBean("order", assignedTable, actualCovers, ordered);
+			Order order = (Order) appContext.getBean("order", assignedTable.getTableId(), actualCovers, ordered);
+			System.out.println("\n\n");
 			System.out.println(assignedTable);
 			System.out.println(order);
-			
 		} else {
 			System.out.println("Sorry, at the moment we don't have enough space for your group");
-			appContext.close();
 		}
+		appContext.close();
 	}		
 
 	public static int askForInteger() {

@@ -3,10 +3,14 @@ package com.gf_pizza.dec_pattern.concrete_component;
 import com.gf_pizza.dec_pattern.component.Consummation;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 public class ConcreteDrink extends Consummation {
 	
 	protected E_ConcreteDrink name;

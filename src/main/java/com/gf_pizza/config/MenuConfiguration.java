@@ -18,7 +18,7 @@ public class MenuConfiguration {
 	// pizza beans
 	
 	@Bean
-	@Scope("prototype")
+	@Scope("singleton")
 	public Consummation margherita() {
 		return new ConcretePizza();
 	}
@@ -93,8 +93,8 @@ public class MenuConfiguration {
 	
 	@Bean
 	@Scope("prototype")
-	public Order order(Table t, int covers, List<Consummation> ordered) {
-		return new Order(t, E_OrderStatus.RUNNING, covers, ordered);
+	public Order order(Long tableId, int covers, List<Consummation> ordered) {
+		return new Order(tableId, covers, E_OrderStatus.RUNNING, ordered);
 	}
 	
 }

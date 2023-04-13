@@ -5,23 +5,23 @@ import com.gf_pizza.dec_pattern.decorator.ExtraAdditionDecorator;
 
 public class ExtraMushroomsDecorator extends ExtraAdditionDecorator {
 
-	public ExtraMushroomsDecorator(Consummation consumation) {
-		this.consumation = consumation;
+	public ExtraMushroomsDecorator(Consummation consummation) {
+		super(consummation);
 	}
-	
+
 	@Override
 	public String getName() {
-		return consumation.getName() + "+ mushrooms ";
+		return consummation.getName() + "+ mushrooms ";
 	}
 
 	@Override
 	public double getKcal() {
-		return consumation.getKcal() + 350;
+		return consummation.getKcal() + 350;
 	}
 	
 	@Override
 	public double getPrice() {
-		return consumation.getPrice() + 1.50;
+		return consummation.getPrice() + 1.50;
 	}
 
 	public String toString() {

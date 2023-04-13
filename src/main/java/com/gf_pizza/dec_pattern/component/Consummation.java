@@ -1,8 +1,10 @@
 package com.gf_pizza.dec_pattern.component;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public abstract class Consummation {
 	
 	protected String name = "";

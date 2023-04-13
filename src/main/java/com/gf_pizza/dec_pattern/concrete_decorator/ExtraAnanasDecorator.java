@@ -4,24 +4,24 @@ import com.gf_pizza.dec_pattern.component.Consummation;
 import com.gf_pizza.dec_pattern.decorator.ExtraAdditionDecorator;
 
 public class ExtraAnanasDecorator extends ExtraAdditionDecorator {
-
-	public ExtraAnanasDecorator(Consummation consumation) {
-		this.consumation = consumation;
-	}
 	
+	public ExtraAnanasDecorator(Consummation consummation) {
+		super(consummation);
+	}
+
 	@Override
 	public String getName() {
-		return consumation.getName() + "+ ananas ";
+		return consummation.getName() + "+ ananas ";
 	}
 	
 	@Override
 	public double getKcal() {
-		return consumation.getKcal() + 200;
+		return consummation.getKcal() + 200;
 	}
 	
 	@Override
 	public double getPrice() {
-		return consumation.getPrice() + 0.90;
+		return consummation.getPrice() + 0.90;
 	}
 
 	public String toString() {
