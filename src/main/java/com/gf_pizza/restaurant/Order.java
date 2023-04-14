@@ -3,6 +3,8 @@ package com.gf_pizza.restaurant;
 import java.util.List;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import com.gf_pizza.dec_pattern.component.Consummation;
 
 import lombok.Getter;
@@ -15,6 +17,9 @@ import lombok.Setter;
 public class Order {
 	
 	private static Random rd = new Random();
+	@Value("${cover.cost.per.person}")
+	private double coverCost;
+	
 	private long orderId = Math.abs(rd.nextLong());
 	private long tableId;
 	private int covers;
@@ -29,8 +34,8 @@ public class Order {
 		this.consList = consList;
 	}	
 	
-	public double calculateCoversCosts() {
-		return 1.5 * covers;
+	public double calculateCoversCosts() {		
+		return coverCost * covers;
 	}
 	
 	public double getTotalAmount() {

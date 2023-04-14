@@ -2,20 +2,23 @@ package com.gf_pizza;
 
 import java.util.ArrayList;
 import com.gf_pizza.restaurant.*;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import com.gf_pizza.dec_pattern.component.Consummation;
 import com.gf_pizza.dec_pattern.concrete_component.ConcretePizza;
-import com.gf_pizza.config.*;
 import java.util.Scanner;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class RestaurantRunner implements CommandLineRunner {
 	
+	@Autowired
+	ApplicationContext ctx;
 	private static Scanner sc = new Scanner(System.in);
 
 	@Override
@@ -24,20 +27,20 @@ public class RestaurantRunner implements CommandLineRunner {
 	}
 	
 	public void configWith_Beans() {
-		// exercise 2
-		AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext(MenuConfiguration.class);
+		
+		
 		List<Table> tableList = new ArrayList<Table>();
 		
-		Table t1 = (Table) appContext.getBean("table", 6);
+		Table t1 = (Table) ctx.getBean("table", 6);
 		tableList.add(t1);
-		Table t2 = (Table) appContext.getBean("table", 4);
+		Table t2 = (Table) ctx.getBean("table", 4);
 		tableList.add(t2);
-		Table t3 = (Table) appContext.getBean("table", 2);
+		Table t3 = (Table) ctx.getBean("table", 2);
 		tableList.add(t3);
-		Table t4 = (Table) appContext.getBean("table", 4);
+		Table t4 = (Table) ctx.getBean("table", 4);
 		tableList.add(t4);
 		
-		System.out.println("Welcome to GodFather's Pizza, how many persons are you?");
+		log.info("Welcome to GodFather's Pizza, how many persons are you?");
 		int actualCovers = askForInteger();
 		
 		List<Table> availableTable = tableList.stream()
@@ -46,38 +49,37 @@ public class RestaurantRunner implements CommandLineRunner {
 				.collect(Collectors.toList());
 		
 		if (availableTable.size() > 0) {
-			System.out.println("Okay then, accommodate yourself");
+			System.out.println("\nOkay then, accommodate yourself");
 			Table assignedTable = availableTable.get(0);
 			assignedTable.setStatus(E_TableStatus.OCCUPIED);
 			List<Consummation> ordered = new ArrayList<Consummation>();
 			
 			int j = actualCovers;
 			while (j > 0) {
-				System.out.println("1 - Pizza & Drink \n"
+				System.out.println("\n1 - Pizza & Drink \n"
 						+ "2 - Only Pizza \n"
-						+ "3 - Only Drink \n");
+						+ "3 - Only Drink ");
 							
 				int orderPick = askForInteger(1, 3);
 								
 				switch (orderPick) {
 					case 1 -> {
-						System.out.println("\nOkay, let's order a drink");
+						System.out.println("\nOkay, let's order a drink\n");
 						String[] drinksArray = {"Still Water", "Sparkling Water", "CocaCola", "The", "Beer"};
 									
 						for (int i = 0; i < drinksArray.length; i++) {
 							System.out.println((i+1) + " - " + drinksArray[i]);
 						}
 									
-						System.out.println("\nSelect a drink by her own code");
 						int drinkChoice = askForInteger(1, 5);
 								
 						Consummation drink = null;
 						switch (drinkChoice) {
-							case 1 -> drink = (Consummation) appContext.getBean("still_water");
-							case 2 -> drink = (Consummation) appContext.getBean("sparkling_water");
-							case 3 -> drink = (Consummation) appContext.getBean("coca_cola");
-							case 4 -> drink = (Consummation) appContext.getBean("the");
-							case 5 -> drink = (Consummation) appContext.getBean("beer");
+							case 1 -> drink = (Consummation) ctx.getBean("still_water");
+							case 2 -> drink = (Consummation) ctx.getBean("sparkling_water");
+							case 3 -> drink = (Consummation) ctx.getBean("coca_cola");
+							case 4 -> drink = (Consummation) ctx.getBean("the");
+							case 5 -> drink = (Consummation) ctx.getBean("beer");
 						}
 									
 						System.out.println("\nWould you like to order a normal pizza or a large one?");
@@ -95,11 +97,11 @@ public class RestaurantRunner implements CommandLineRunner {
 									
 						Consummation pizza = null;
 						switch (pizzaChoice) {
-							case 1 -> pizza = (Consummation) appContext.getBean("margherita");
-							case 2 -> pizza = (Consummation) appContext.getBean("ham", new ConcretePizza());
-							case 3 -> pizza = (Consummation) appContext.getBean("mushrooms", (Consummation) appContext.getBean("ham", new ConcretePizza()));
-							case 4 -> pizza = (Consummation) appContext.getBean("ham", (Consummation) appContext.getBean("ananas", new ConcretePizza()));
-							case 5 -> pizza = (Consummation) appContext.getBean("doubleHam", new ConcretePizza());
+							case 1 -> pizza = (Consummation) ctx.getBean("margherita");
+							case 2 -> pizza = (Consummation) ctx.getBean("ham", new ConcretePizza());
+							case 3 -> pizza = (Consummation) ctx.getBean("mushrooms", (Consummation) ctx.getBean("ham", new ConcretePizza()));
+							case 4 -> pizza = (Consummation) ctx.getBean("ham", (Consummation) ctx.getBean("ananas", new ConcretePizza()));
+							case 5 -> pizza = (Consummation) ctx.getBean("doubleHam", new ConcretePizza());
 							case 6 -> {
 								System.out.println("\nOkay, what toppings would you like to add?");
 								
@@ -121,19 +123,19 @@ public class RestaurantRunner implements CommandLineRunner {
 									} 
 								} while (otherTopping);
 										
-								pizza = (Consummation) appContext.getBean("margherita");
+								pizza = (Consummation) ctx.getBean("margherita");
 								for (Integer i : customerToppingsList) {
 									switch (i) {
-										case 1 -> pizza = (Consummation) appContext.getBean("ham", pizza); 
-										case 2 -> pizza = (Consummation) appContext.getBean("mushrooms", pizza); 
-										case 3 -> pizza = (Consummation) appContext.getBean("doubleHam", pizza); 
-										case 4 -> pizza = (Consummation) appContext.getBean("ananas", pizza); 								}
+										case 1 -> pizza = (Consummation) ctx.getBean("ham", pizza); 
+										case 2 -> pizza = (Consummation) ctx.getBean("mushrooms", pizza); 
+										case 3 -> pizza = (Consummation) ctx.getBean("doubleHam", pizza); 
+										case 4 -> pizza = (Consummation) ctx.getBean("ananas", pizza); 								}
 									}
 								}						
 							}
 									
 							if (pizzaSize.equals("l")) {
-								pizza = (Consummation) appContext.getBean("large", pizza);
+								pizza = (Consummation) ctx.getBean("large", pizza);
 							}
 							
 							ordered.add(pizza);
@@ -156,11 +158,11 @@ public class RestaurantRunner implements CommandLineRunner {
 								
 						Consummation pizza = null;
 						switch (pizzaChoice) {
-							case 1 -> pizza = (Consummation) appContext.getBean("margherita");
-							case 2 -> pizza = (Consummation) appContext.getBean("ham", new ConcretePizza());
-							case 3 -> pizza = (Consummation) appContext.getBean("mushrooms", (Consummation) appContext.getBean("ham", new ConcretePizza()));
-							case 4 -> pizza = (Consummation) appContext.getBean("ham", (Consummation) appContext.getBean("ananas", new ConcretePizza()));
-							case 5 -> pizza = (Consummation) appContext.getBean("doubleHam", new ConcretePizza());
+							case 1 -> pizza = (Consummation) ctx.getBean("margherita");
+							case 2 -> pizza = (Consummation) ctx.getBean("ham", new ConcretePizza());
+							case 3 -> pizza = (Consummation) ctx.getBean("mushrooms", (Consummation) ctx.getBean("ham", new ConcretePizza()));
+							case 4 -> pizza = (Consummation) ctx.getBean("ham", (Consummation) ctx.getBean("ananas", new ConcretePizza()));
+							case 5 -> pizza = (Consummation) ctx.getBean("doubleHam", new ConcretePizza());
 							case 6 -> {
 								System.out.println("\nOkay, what toppings would you like to add?");
 										
@@ -182,20 +184,20 @@ public class RestaurantRunner implements CommandLineRunner {
 									} 
 								} while (otherTopping);
 											
-								pizza = (Consummation) appContext.getBean("margherita");
+								pizza = (Consummation) ctx.getBean("margherita");
 								for (Integer i : customerToppingsList) {
 									switch (i) {
-										case 1 -> pizza = (Consummation) appContext.getBean("ham", pizza); 
-										case 2 -> pizza = (Consummation) appContext.getBean("mushrooms", pizza); 
-										case 3 -> pizza = (Consummation) appContext.getBean("doubleHam", pizza); 
-										case 4 -> pizza = (Consummation) appContext.getBean("ananas", pizza); 
+										case 1 -> pizza = (Consummation) ctx.getBean("ham", pizza); 
+										case 2 -> pizza = (Consummation) ctx.getBean("mushrooms", pizza); 
+										case 3 -> pizza = (Consummation) ctx.getBean("doubleHam", pizza); 
+										case 4 -> pizza = (Consummation) ctx.getBean("ananas", pizza); 
 									}
 								}
 							}
 						}
 								
 						if (pizzaSize.equals("l")) {
-							pizza = (Consummation) appContext.getBean("large", pizza);
+							pizza = (Consummation) ctx.getBean("large", pizza);
 						}					
 						
 						ordered.add(pizza);
@@ -215,11 +217,11 @@ public class RestaurantRunner implements CommandLineRunner {
 							
 						Consummation drink = null;
 						switch (drinkChoice) {
-							case 1 -> drink = (Consummation) appContext.getBean("still_water");
-							case 2 -> drink = (Consummation) appContext.getBean("sparkling_water");
-							case 3 -> drink = (Consummation) appContext.getBean("coca_cola");
-							case 4 -> drink = (Consummation) appContext.getBean("the");
-							case 5 -> drink = (Consummation) appContext.getBean("beer");
+							case 1 -> drink = (Consummation) ctx.getBean("still_water");
+							case 2 -> drink = (Consummation) ctx.getBean("sparkling_water");
+							case 3 -> drink = (Consummation) ctx.getBean("coca_cola");
+							case 4 -> drink = (Consummation) ctx.getBean("the");
+							case 5 -> drink = (Consummation) ctx.getBean("beer");
 						}		
 						
 						ordered.add(drink);
@@ -228,14 +230,14 @@ public class RestaurantRunner implements CommandLineRunner {
 				j--;	
 			}
 			
-			Order order = (Order) appContext.getBean("order", assignedTable.getTableId(), actualCovers, ordered);
+			Order order = (Order) ctx.getBean("order", assignedTable.getTableId(), actualCovers, ordered);
 			System.out.println("\n\n");
 			System.out.println(assignedTable);
 			System.out.println(order);
 		} else {
 			System.out.println("Sorry, at the moment we don't have enough space for your group");
 		}
-		appContext.close();
+	
 	}		
 
 	public static int askForInteger() {
